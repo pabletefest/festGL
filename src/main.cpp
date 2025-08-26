@@ -145,9 +145,7 @@ int main() {
       glfwSwapBuffers(window);
       
       /* Poll for and process events */
-      std::println("Polling events...");
       glfwPollEvents();
-      std::println("Polled events!");
   }
 
   glDeleteProgram(pipelineProgramID);
