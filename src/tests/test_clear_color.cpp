@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-#include "imgui.h"
+#include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
 TestClearColor::TestClearColor(const std::string &name)
