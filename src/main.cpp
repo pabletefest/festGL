@@ -5,7 +5,7 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 #include "tests/tests_menu.hpp"
@@ -36,7 +36,7 @@ int main() {
   /* Make the window's context current */
   glfwMakeContextCurrent(window);
 
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+  if (!gladLoadGL(glfwGetProcAddress))
   {
     std::println("Failed to initialize GLAD");
     return -1;

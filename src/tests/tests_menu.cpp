@@ -1,6 +1,6 @@
 #include "tests_menu.hpp"
 
-#include "glad/glad.h"
+#include "glad/gl.h"
 
 #include "imgui.h"
 

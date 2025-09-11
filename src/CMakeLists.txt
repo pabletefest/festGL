@@ -9,4 +9,6 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hello_triangle.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL Glad glm::glm imgui)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_BINARY_DIR})
+
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL glad glm::glm imgui)

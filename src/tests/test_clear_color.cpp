@@ -1,6 +1,6 @@
 #include "test_clear_color.hpp"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>

@@ -2,7 +2,7 @@
 
 #include "test.hpp"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include <glm/vec4.hpp>
 
