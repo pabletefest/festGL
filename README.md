@@ -1,6 +1,6 @@
 # festGL [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<img width="612" height="408" alt="festGL_icon_transparent" src="https://github.com/user-attachments/assets/cd94f672-d43f-4dec-9561-5c6a2dde2444" />
+<img width="534" height="467" alt="festGL transparent logo" src="https://github.com/user-attachments/assets/c5d74f77-8f59-42e5-a086-8b2db600700e" />
 
 OpenGL 3D Renderer (WIP) written in modern C++ and CMake using modern OpenGL API. This project is meant to be cross-platform compatible with Windows and Linux.
 
