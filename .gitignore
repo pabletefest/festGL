@@ -20,4 +20,5 @@ CMakeUserPresets.json
 
 .vscode/
 [Bb]uild/
-third-party/
+third-party/G*
+third-party/ImGui
