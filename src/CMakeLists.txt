@@ -2,6 +2,14 @@ find_package(OpenGL REQUIRED)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
+add_custom_target(copy_resources ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${PROJECT_SOURCE_DIR}/shaders
+        ${PROJECT_BINARY_DIR}/shaders
+        COMMENT "Copying shaders into binary directory")
+
+add_dependencies(${PROJECT_NAME} copy_resources)
+
 target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/tests_menu.cpp

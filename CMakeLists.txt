@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.31)
-project(OpenGLRenderer VERSION 0.1.0 LANGUAGES C CXX)
+project(festGL VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 23)
 # set(CMAKE_CSTANDARD_REQUIRED ON)
@@ -75,20 +75,20 @@ endif()
 set_target_properties(glm PROPERTIES FOLDER "Dependencies")
 
 FetchContent_Declare(imgui_external
-	URL https://github.com/ocornut/imgui/archive/refs/tags/v1.92.2b.tar.gz
-	EXCLUDE_FROM_ALL
+ URL https://github.com/ocornut/imgui/archive/refs/tags/v1.92.2b.tar.gz
+ EXCLUDE_FROM_ALL
 )
 
 FetchContent_MakeAvailable(imgui_external)
 
 add_library(imgui
-	${imgui_external_SOURCE_DIR}/imgui.cpp
-	${imgui_external_SOURCE_DIR}/imgui_draw.cpp
-	${imgui_external_SOURCE_DIR}/imgui_tables.cpp
-	${imgui_external_SOURCE_DIR}/imgui_widgets.cpp
-	${imgui_external_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
-	${imgui_external_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
-	${imgui_external_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
+ ${imgui_external_SOURCE_DIR}/imgui.cpp
+ ${imgui_external_SOURCE_DIR}/imgui_draw.cpp
+ ${imgui_external_SOURCE_DIR}/imgui_tables.cpp
+ ${imgui_external_SOURCE_DIR}/imgui_widgets.cpp
+ ${imgui_external_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+ ${imgui_external_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+ ${imgui_external_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
 )
 
 target_include_directories(imgui PUBLIC ${imgui_external_SOURCE_DIR})

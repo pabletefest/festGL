@@ -28,8 +28,8 @@ TestHelloTriangle::TestHelloTriangle(const std::string &name)
 {
     m_pipelineProgramID= glCreateProgram();
 
-    std::string vs = readShaderFile("../../../src/shaders/shader.glsl.vert");
-    std::string fs = readShaderFile("../../../src/shaders/shader.glsl.frag");
+    std::string vs = readShaderFile("./shaders/color.glsl.vert");
+    std::string fs = readShaderFile("./shaders/color.glsl.frag");
 
     std::println("\nVERTEX SHADER: \n{}", vs);
     std::println("\nFRAGMENT SHADER: \n{}", fs);
@@ -94,11 +94,11 @@ TestHelloTriangle::TestHelloTriangle(const std::string &name)
 
     glGenVertexArrays(1, &m_VAO);
     glBindVertexArray(m_VAO);
-    
+
     glGenBuffers(1, &m_VBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_trianglePositions), g_trianglePositions, GL_STATIC_DRAW);
-    
+
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 

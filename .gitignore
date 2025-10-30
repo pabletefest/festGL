@@ -19,6 +19,7 @@ CMakeUserPresets.json
 #cmake-build-*
 
 .vscode/
+.zed/
 [Bb]uild/
 third-party/G*
 third-party/ImGui
