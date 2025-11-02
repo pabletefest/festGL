@@ -11,6 +11,7 @@
 #include "tests/tests_menu.hpp"
 #include "tests/test_clear_color.hpp"
 #include "tests/test_hello_triangle.hpp"
+#include "tests/test_texture2D_square.hpp"
 
 int main() {
   std::println("Hello OpenGL renderer!");
@@ -72,6 +73,7 @@ int main() {
   TestsMenu testsMenu = TestsMenu("Tests Menu");
   testsMenu.registerTest<TestClearColor>("Clear color");
   testsMenu.registerTest<TestHelloTriangle>("Hello triangle");
+  testsMenu.registerTest<TestText2DSquare>("Texture2D Quad");
 
   std::string panelTitle = testsMenu.getTestName();
 

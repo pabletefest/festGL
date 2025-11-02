@@ -1,4 +1,4 @@
-#include "test_hello_triangle.hpp"
+#include "test_texture2D_square.hpp"
 
 #include <print>
 #include <filesystem>
@@ -7,29 +7,32 @@
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <stb_image.h>
 
 static std::string readShaderFile(std::filesystem::path filepath) {
   std::ifstream fileStream{ filepath, std::ios::binary };
   return { std::istreambuf_iterator{fileStream}, {} };
 }
 
-static const GLfloat g_trianglePositions[] = {
-   -1.0f, -1.0f,
-    0.0f,  1.0f,
-    1.0f, -1.0f
+static const GLfloat g_quadPositions[] = {
+   -0.5f,  0.5f, 0.0f, 1.0f, // Top left
+    0.5f,  0.5f, 1.0f, 1.0f, // Top right
+    0.5f, -0.5f, 1.0f, 0.0f, // Bottom right
+   -0.5f, -0.5f, 0.0f, 0.0f  // Bottom left
 };
 
-static const GLuint g_triangleIndexes[] = {
-    0, 2, 1
+static const GLuint g_quadIndexes[] = {
+    0, 1, 2,
+    2, 3, 0
 };
 
-TestHelloTriangle::TestHelloTriangle(const std::string &name)
-    : Test(name), m_VAO(0), m_VBO(0), m_IBO(0), m_pipelineProgramID(0), m_triangleColor({ 1.0f, 0.0f, 0.0f, 1.0f})
+TestText2DSquare::TestText2DSquare(const std::string &name)
+    : Test(name), m_VAO(0), m_VBO(0), m_IBO(0), m_pipelineProgramID(0), m_textureID(0)
 {
     m_pipelineProgramID= glCreateProgram();
 
-    std::string vs = readShaderFile("./../../shaders/color.glsl.vert");
-    std::string fs = readShaderFile("./../../shaders/color.glsl.frag");
+    std::string vs = readShaderFile("./../../shaders/texture.glsl.vert");
+    std::string fs = readShaderFile("./../../shaders/texture.glsl.frag");
 
     std::println("\nVERTEX SHADER: \n{}", vs);
     std::println("\nFRAGMENT SHADER: \n{}", fs);
@@ -97,19 +100,43 @@ TestHelloTriangle::TestHelloTriangle(const std::string &name)
 
     glGenBuffers(1, &m_VBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_trianglePositions), g_trianglePositions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_quadPositions), g_quadPositions, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (const void *)8);
 
     glGenBuffers(1, &m_IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_triangleIndexes), g_triangleIndexes, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_quadIndexes), g_quadIndexes, GL_STATIC_DRAW);
+
+    stbi_set_flip_vertically_on_load(true);
+    int width, height, channels;
+    unsigned char *imageData = stbi_load("./../../resources/red-brick-wall-2048x2048.jpg",&width, &height, &channels, 0);
+
+    if (!imageData) {
+        std::println("Couldn't load image data!");
+        exit(1);
+    }
+
+    glGenTextures(1, &m_textureID);
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glBindVertexArray(0);
+    stbi_image_free(imageData);
 }
 
-TestHelloTriangle::~TestHelloTriangle()
+TestText2DSquare::~TestText2DSquare()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -121,22 +148,30 @@ TestHelloTriangle::~TestHelloTriangle()
     glDeleteVertexArrays(1, &m_VAO);
 }
 
-void TestHelloTriangle::onUpdate()
+void TestText2DSquare::onUpdate()
 {
-    GLint location = glGetUniformLocation(m_pipelineProgramID, "uColor");
-    glUniform4fv(location, 1, glm::value_ptr(m_triangleColor));
 }
 
-void TestHelloTriangle::onRender()
+void TestText2DSquare::onRender()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    glUseProgram(m_pipelineProgramID);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
     glBindVertexArray(m_VAO);
+
+    GLint location = glGetUniformLocation(m_pipelineProgramID, "uTextCoord");
+    glUniform1i(location, 0);
+
     // glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDrawElements(GL_TRIANGLES, sizeof(g_trianglePositions)/sizeof(g_trianglePositions[0]), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+    glUseProgram(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindVertexArray(0);
 }
 
-void TestHelloTriangle::onImGuiRender()
+void TestText2DSquare::onImGuiRender()
 {
-    ImGui::ColorEdit4("Triangle color", glm::value_ptr(m_triangleColor));
 }
