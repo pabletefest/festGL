@@ -5,7 +5,7 @@
 OpenGL 3D Renderer (WIP) written in modern C++ and CMake using modern OpenGL API. This project is meant to be cross-platform compatible with Windows and Linux.
 
 ## Screenshots
-<img width="641" height="507" alt="imagen" src="https://github.com/user-attachments/assets/092f7cc1-c965-4665-aa26-14f3da62503d" />
+<img width="641" height="511" alt="imagen" src="https://github.com/user-attachments/assets/d093c376-a9fd-47bc-9a69-70c5d4a6f0a1" />
 
 ## Copyright
 
