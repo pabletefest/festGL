@@ -123,17 +123,19 @@ TestHelloTriangle::~TestHelloTriangle()
 
 void TestHelloTriangle::onUpdate()
 {
-    GLint location = glGetUniformLocation(m_pipelineProgramID, "uColor");
-    glUniform4fv(location, 1, glm::value_ptr(m_triangleColor));
 }
 
 void TestHelloTriangle::onRender()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    glUseProgram(m_pipelineProgramID);
+    GLint location = glGetUniformLocation(m_pipelineProgramID, "uColor");
+    glUniform4fv(location, 1, glm::value_ptr(m_triangleColor));
+
     glBindVertexArray(m_VAO);
     // glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDrawElements(GL_TRIANGLES, sizeof(g_trianglePositions)/sizeof(g_trianglePositions[0]), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, sizeof(g_triangleIndexes)/sizeof(g_triangleIndexes[0]), GL_UNSIGNED_INT, nullptr);
 }
 
 void TestHelloTriangle::onImGuiRender()
