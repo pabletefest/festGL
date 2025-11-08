@@ -1,4 +1,5 @@
 #include "test_texture2D_square.hpp"
+#include "image_loader.hpp"
 
 #include <print>
 #include <filesystem>
@@ -7,7 +8,8 @@
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
-#include <stb_image.h>
+
+using namespace festGL;
 
 static std::string readShaderFile(std::filesystem::path filepath) {
   std::ifstream fileStream{ filepath, std::ios::binary };
@@ -112,9 +114,10 @@ TestText2DSquare::TestText2DSquare(const std::string &name)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_quadIndexes), g_quadIndexes, GL_STATIC_DRAW);
 
-    stbi_set_flip_vertically_on_load(true);
     int width, height, channels;
-    unsigned char *imageData = stbi_load("./../../resources/red-brick-wall-2048x2048.jpg",&width, &height, &channels, 0);
+    std::filesystem::path imageFilename = "./../../resources/red-brick-wall-2048x2048.jpg";
+    auto imageData = ImageLoader::loadManaged<ImageLoader::FlipType::Vertical>(imageFilename, 
+        width, height, channels);
 
     if (!imageData) {
         std::println("Couldn't load image data!");
@@ -124,7 +127,7 @@ TestText2DSquare::TestText2DSquare(const std::string &name)
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData.get());
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
@@ -133,7 +136,6 @@ TestText2DSquare::TestText2DSquare(const std::string &name)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glBindVertexArray(0);
-    stbi_image_free(imageData);
 }
 
 TestText2DSquare::~TestText2DSquare()

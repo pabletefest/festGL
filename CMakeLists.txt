@@ -100,6 +100,7 @@ target_link_libraries(imgui PRIVATE glfw)
 # add_subdirectory(third-party/GLM)
 # add_subdirectory(third-party/ImGui)
 add_subdirectory(third-party/stb)
+add_subdirectory(src/utils)
 
 #
 #   Project

@@ -28,4 +28,4 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_BINARY_DIR} ${PROJECT_SOURCE_DIR}/third-party)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL glad glm::glm imgui stb)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL glad glm::glm imgui stb utils)
