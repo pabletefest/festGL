@@ -1,4 +1,5 @@
 #include "test_hello_triangle.hpp"
+#include "file_reader.hpp"
 
 #include <print>
 #include <filesystem>
@@ -8,10 +9,7 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
-static std::string readShaderFile(std::filesystem::path filepath) {
-  std::ifstream fileStream{ filepath, std::ios::binary };
-  return { std::istreambuf_iterator{fileStream}, {} };
-}
+using namespace festGL;
 
 static const GLfloat g_trianglePositions[] = {
    -1.0f, -1.0f,
@@ -28,8 +26,8 @@ TestHelloTriangle::TestHelloTriangle(const std::string &name)
 {
     m_pipelineProgramID= glCreateProgram();
 
-    std::string vs = readShaderFile("./../../shaders/color.glsl.vert");
-    std::string fs = readShaderFile("./../../shaders/color.glsl.frag");
+    std::string vs = readFile("./../../shaders/color.glsl.vert");
+    std::string fs = readFile("./../../shaders/color.glsl.frag");
 
     std::println("\nVERTEX SHADER: \n{}", vs);
     std::println("\nFRAGMENT SHADER: \n{}", fs);
