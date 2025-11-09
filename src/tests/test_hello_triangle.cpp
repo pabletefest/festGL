@@ -1,4 +1,5 @@
 #include "test_hello_triangle.hpp"
+#include "file_reader.hpp"
 
 #include <print>
 #include <filesystem>
@@ -8,10 +9,7 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
-static std::string readShaderFile(std::filesystem::path filepath) {
-  std::ifstream fileStream{ filepath, std::ios::binary };
-  return { std::istreambuf_iterator{fileStream}, {} };
-}
+using namespace festGL;
 
 static const GLfloat g_trianglePositions[] = {
    -1.0f, -1.0f,
@@ -24,73 +22,12 @@ static const GLuint g_triangleIndexes[] = {
 };
 
 TestHelloTriangle::TestHelloTriangle(const std::string &name)
-    : Test(name), m_VAO(0), m_VBO(0), m_IBO(0), m_pipelineProgramID(0), m_triangleColor({ 1.0f, 0.0f, 0.0f, 1.0f})
+    : Test(name), m_VAO(0), m_VBO(0), m_IBO(0), m_triangleColor({ 1.0f, 0.0f, 0.0f, 1.0f})
 {
-    m_pipelineProgramID= glCreateProgram();
+    std::filesystem::path vsPath = "./../../shaders/color.glsl.vert";
+    std::filesystem::path fsPath = "./../../shaders/color.glsl.frag";
 
-    std::string vs = readShaderFile("./../../shaders/color.glsl.vert");
-    std::string fs = readShaderFile("./../../shaders/color.glsl.frag");
-
-    std::println("\nVERTEX SHADER: \n{}", vs);
-    std::println("\nFRAGMENT SHADER: \n{}", fs);
-
-    GLuint vsShaderID = glCreateShader(GL_VERTEX_SHADER);
-    const char* vsShaderSource = vs.c_str();
-    glShaderSource(vsShaderID, 1, &vsShaderSource, nullptr);
-    glCompileShader(vsShaderID);
-
-    GLint result;
-    glGetShaderiv(vsShaderID, GL_COMPILE_STATUS, &result);
-
-    if (!result) {
-        GLsizei length;
-        char message[1024];
-        glGetShaderInfoLog(vsShaderID, sizeof(message), &length, message);
-        std::println("Error compiling shader: {}!", message);
-        glDeleteShader(vsShaderID);
-        exit(1);
-    }
-
-    GLuint fsShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* fsShaderSource = fs.c_str();
-    glShaderSource(fsShaderID, 1, &fsShaderSource, nullptr);
-    glCompileShader(fsShaderID);
-
-    glGetShaderiv(fsShaderID, GL_COMPILE_STATUS, &result);
-
-    if (!result) {
-        GLsizei length;
-        char message[1024];
-        glGetShaderInfoLog(fsShaderID, sizeof(message), &length, message);
-        std::println("Error compiling shader: {}!", message);
-        glDeleteShader(fsShaderID);
-        exit(1);
-    }
-
-    glAttachShader(m_pipelineProgramID, vsShaderID);
-    glAttachShader(m_pipelineProgramID, fsShaderID);
-
-    glLinkProgram(m_pipelineProgramID);
-
-    glValidateProgram(m_pipelineProgramID);
-
-    glGetProgramiv(m_pipelineProgramID, GL_VALIDATE_STATUS, &result);
-
-    if (!result) {
-        GLsizei length;
-        char message[1024];
-        glGetProgramInfoLog(m_pipelineProgramID, sizeof(message), &length, message);
-        std::println("Error validating shader program: {}!", message);
-        glDeleteProgram(m_pipelineProgramID);
-        exit(1);
-    }
-
-    glUseProgram(m_pipelineProgramID);
-
-    glDetachShader(m_pipelineProgramID, vsShaderID);
-    glDetachShader(m_pipelineProgramID, fsShaderID);
-    glDeleteShader(vsShaderID);
-    glDeleteShader(fsShaderID);
+    m_shader = IShader::createUnique(vsPath, fsPath);
 
     glGenVertexArrays(1, &m_VAO);
     glBindVertexArray(m_VAO);
@@ -115,7 +52,6 @@ TestHelloTriangle::~TestHelloTriangle()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    glDeleteProgram(m_pipelineProgramID);
     glDeleteBuffers(1, &m_VBO);
     glDeleteBuffers(1, &m_VBO);
     glDeleteVertexArrays(1, &m_VAO);
@@ -129,13 +65,13 @@ void TestHelloTriangle::onRender()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(m_pipelineProgramID);
-    GLint location = glGetUniformLocation(m_pipelineProgramID, "uColor");
-    glUniform4fv(location, 1, glm::value_ptr(m_triangleColor));
+    m_shader->apply();
+    m_shader->setDataBuffer<glm::vec4>("uColor", { m_triangleColor } );
 
     glBindVertexArray(m_VAO);
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
     glDrawElements(GL_TRIANGLES, sizeof(g_triangleIndexes)/sizeof(g_triangleIndexes[0]), GL_UNSIGNED_INT, nullptr);
+
+    glBindVertexArray(0);
 }
 
 void TestHelloTriangle::onImGuiRender()

@@ -24,8 +24,15 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_clear_color.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hello_triangle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_texture2D_square.cpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/renderer/shader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/renderer_backend/OpenGL/ogl_shader.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_BINARY_DIR} ${PROJECT_SOURCE_DIR}/third-party)
+target_include_directories(${PROJECT_NAME} PUBLIC
+        ${CMAKE_BINARY_DIR} 
+        ${PROJECT_SOURCE_DIR}/src 
+        ${PROJECT_SOURCE_DIR}/third-party
+)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL glad glm::glm imgui stb utils)
