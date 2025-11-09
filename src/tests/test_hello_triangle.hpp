@@ -1,10 +1,14 @@
 #pragma once
 
 #include "test.hpp"
+#include "renderer/shader.hpp"
 
 #include <glad/gl.h>
-
 #include <glm/vec4.hpp>
+
+#include <memory>
+
+using namespace festGL;
 
 class TestHelloTriangle : public Test {
 public:
@@ -16,7 +20,7 @@ public:
     void onImGuiRender() override;
 
 private:
-    GLuint m_pipelineProgramID; // Shaders program ID
+    std::unique_ptr<IShader> m_shader;
 
     GLuint m_VAO; // Vertex Array Object
     GLuint m_VBO; // Vertex Buffer Object
