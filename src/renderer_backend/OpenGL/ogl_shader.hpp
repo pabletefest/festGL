@@ -13,13 +13,6 @@ namespace festGL {
 
             auto apply() -> void override;
 
-        // protected:
-        //     template<typename T>
-        //     struct OGLShaderDataSetter : public IShaderDataSetter<T>  {
-        //         void operator()(uint32_t id, const std::string& name, const T& data) override;
-        //         void operator()(uint32_t id, const std::string& name, std::span<T> buffer) override;
-        //     };
-
         private:
             auto compileShader(const std::string& source, GLenum type) -> GLuint;
     };

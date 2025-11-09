@@ -63,7 +63,7 @@ auto OGLShader::apply() -> void
 }
 
 template<>
-void OGLShader::IShaderDataSetter::operator()<GLfloat>(uint32_t id, const std::string &name, 
+void OGLShader::ShaderDataSetter::operator()<GLfloat>(uint32_t id, const std::string &name, 
     const GLfloat &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
@@ -71,7 +71,7 @@ void OGLShader::IShaderDataSetter::operator()<GLfloat>(uint32_t id, const std::s
 }
 
 template<>
-void OGLShader::IShaderDataSetter::operator()<GLuint>(uint32_t id, const std::string &name, 
+void OGLShader::ShaderDataSetter::operator()<GLuint>(uint32_t id, const std::string &name, 
     const GLuint &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
@@ -79,7 +79,7 @@ void OGLShader::IShaderDataSetter::operator()<GLuint>(uint32_t id, const std::st
 }
 
 template<>
-void OGLShader::IShaderDataSetter::operator()<GLint>(uint32_t id, const std::string &name, 
+void OGLShader::ShaderDataSetter::operator()<GLint>(uint32_t id, const std::string &name, 
     const GLint &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
@@ -87,7 +87,7 @@ void OGLShader::IShaderDataSetter::operator()<GLint>(uint32_t id, const std::str
 }
 
 template<>
-void OGLShader::IShaderDataSetter::operator()<glm::vec2>(uint32_t id, const std::string &name, 
+void OGLShader::ShaderDataSetter::operator()<glm::vec2>(uint32_t id, const std::string &name, 
     const glm::vec2 &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
@@ -95,14 +95,14 @@ void OGLShader::IShaderDataSetter::operator()<glm::vec2>(uint32_t id, const std:
 }
 
 template<>
-void OGLShader::IShaderDataSetter::operator()<glm::vec3>(uint32_t id, const std::string &name, const glm::vec3 &data)
+void OGLShader::ShaderDataSetter::operator()<glm::vec3>(uint32_t id, const std::string &name, const glm::vec3 &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
     glUniform3f(location, data.x, data.y, data.z);
 }
 
 template<>
-void OGLShader::IShaderDataSetter::operator()<glm::vec4>(uint32_t id, const std::string &name, 
+void OGLShader::ShaderDataSetter::operator()<glm::vec4>(uint32_t id, const std::string &name, 
     const glm::vec4 &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
@@ -110,7 +110,7 @@ void OGLShader::IShaderDataSetter::operator()<glm::vec4>(uint32_t id, const std:
 }
 
 template<>
-void OGLShader::IShaderDataSetter::operator()<GLfloat>(uint32_t id, const std::string &name, 
+void OGLShader::ShaderDataSetter::operator()<GLfloat>(uint32_t id, const std::string &name, 
     std::vector<GLfloat> buffer)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
@@ -118,7 +118,7 @@ void OGLShader::IShaderDataSetter::operator()<GLfloat>(uint32_t id, const std::s
 }
 
 template<>
-void OGLShader::IShaderDataSetter::operator()<glm::vec4>(uint32_t id, const std::string &name, 
+void OGLShader::ShaderDataSetter::operator()<glm::vec4>(uint32_t id, const std::string &name, 
     std::vector<glm::vec4> buffer)
 {
     GLint location = glGetUniformLocation(id, name.c_str());

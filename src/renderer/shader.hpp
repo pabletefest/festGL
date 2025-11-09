@@ -27,7 +27,7 @@ namespace festGL {
                 const std::filesystem::path fragShaderPath) -> std::shared_ptr<IShader>;
 
         protected:
-            struct IShaderDataSetter {
+            struct ShaderDataSetter {
                 template<typename T>
                 void operator()(uint32_t id, const std::string& name, const T& data);
                 
@@ -41,12 +41,12 @@ namespace festGL {
     template <typename T>
     inline auto IShader::setData(const std::string &name, const T &value) -> void
     {
-        std::invoke(IShaderDataSetter(), m_shaderID, name, value);
+        std::invoke(ShaderDataSetter(), m_shaderID, name, value);
     }
     
     template <typename T>
     inline auto IShader::setDataBuffer(const std::string &name, std::vector<T> values) -> void
     {
-        std::invoke(IShaderDataSetter(), m_shaderID, name, values);
+        std::invoke(ShaderDataSetter(), m_shaderID, name, values);
     }
 };
