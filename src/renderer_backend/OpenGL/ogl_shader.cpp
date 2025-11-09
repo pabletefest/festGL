@@ -95,7 +95,8 @@ void OGLShader::ShaderDataSetter::operator()<glm::vec2>(uint32_t id, const std::
 }
 
 template<>
-void OGLShader::ShaderDataSetter::operator()<glm::vec3>(uint32_t id, const std::string &name, const glm::vec3 &data)
+void OGLShader::ShaderDataSetter::operator()<glm::vec3>(uint32_t id, const std::string &name, 
+    const glm::vec3 &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
     glUniform3f(location, data.x, data.y, data.z);
@@ -107,6 +108,14 @@ void OGLShader::ShaderDataSetter::operator()<glm::vec4>(uint32_t id, const std::
 {
     GLint location = glGetUniformLocation(id, name.c_str());
     glUniform4f(location, data.x, data.y, data.z, data.w);
+}
+
+template<>
+void OGLShader::ShaderDataSetter::operator()<glm::mat4>(uint32_t id, const std::string &name, 
+    const glm::mat4 &data)
+{
+    GLint location = glGetUniformLocation(id, name.c_str());
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(data));
 }
 
 template<>
