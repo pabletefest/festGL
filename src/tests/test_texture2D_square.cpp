@@ -29,22 +29,25 @@ TestText2DSquare::TestText2DSquare(const std::string &name)
 
     m_shader = IShader::createUnique(vsPath, fsPath);
 
-    glGenVertexArrays(1, &m_VAO);
-    glBindVertexArray(m_VAO);
+    glCreateVertexArrays(1, &m_VAO);
 
-    glGenBuffers(1, &m_VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_quadPositions), g_quadPositions, GL_STATIC_DRAW);
+    glCreateBuffers(1, &m_VBO);
+    glNamedBufferStorage(m_VBO, sizeof(g_quadPositions), g_quadPositions, GL_DYNAMIC_STORAGE_BIT);
+    
+    glCreateBuffers(1, &m_IBO);
+    glNamedBufferStorage(m_IBO, sizeof(g_quadIndexes), g_quadIndexes, GL_DYNAMIC_STORAGE_BIT);
+    
+    glVertexArrayVertexBuffer(m_VAO, 0, m_VBO, 0, 4 * sizeof(float));
+    glVertexArrayElementBuffer(m_VAO, m_IBO);
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+    glEnableVertexArrayAttrib(m_VAO, 0);
+    glEnableVertexArrayAttrib(m_VAO, 1);
 
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (const void *)8);
+    glVertexArrayAttribFormat(m_VAO, 0, 2, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribFormat(m_VAO, 1, 2, GL_FLOAT, GL_FALSE, 8);
 
-    glGenBuffers(1, &m_IBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_quadIndexes), g_quadIndexes, GL_STATIC_DRAW);
+    glVertexArrayAttribBinding(m_VAO, 0, 0);
+    glVertexArrayAttribBinding(m_VAO, 1, 0);
 
     int width, height, channels;
     std::filesystem::path imageFilename = "./../../resources/red-brick-wall-2048x2048.jpg";
@@ -56,29 +59,47 @@ TestText2DSquare::TestText2DSquare(const std::string &name)
         exit(1);
     }
 
-    glGenTextures(1, &m_textureID);
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
+    GLenum internalFormat = GL_NONE;
+    GLenum format = GL_NONE;
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData.get());
-    glGenerateMipmap(GL_TEXTURE_2D);
+    switch(channels) {
+        case 3:
+            internalFormat = GL_RGB8;
+            format = GL_RGB;
+            break;
+        
+        case 4:
+            internalFormat = GL_RGBA8;
+            format = GL_RGBA;
+            break;
+        
+        default:
+            assert(false && "Invalid texture format!");
+    }
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glCreateTextures(GL_TEXTURE_2D, 1, &m_textureID);
+  
+    glTextureParameteri(m_textureID, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTextureParameteri(m_textureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTextureParameteri(m_textureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTextureParameteri(m_textureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    glTextureStorage2D(m_textureID, 1, internalFormat, width, height);
+    glTextureSubImage2D(m_textureID, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, imageData.get());
+    glGenerateTextureMipmap(m_textureID);
 
     glBindVertexArray(0);
 }
 
 TestText2DSquare::~TestText2DSquare()
 {
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+    glBindTextureUnit(0, 0);
 
     glDeleteBuffers(1, &m_VBO);
     glDeleteBuffers(1, &m_VBO);
     glDeleteVertexArrays(1, &m_VAO);
+    glDeleteTextures(1, &m_textureID);
 }
 
 void TestText2DSquare::onUpdate()
@@ -90,8 +111,7 @@ void TestText2DSquare::onRender()
     glClear(GL_COLOR_BUFFER_BIT);
 
     m_shader->apply();
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
+    glBindTextureUnit(0, m_textureID);
     glBindVertexArray(m_VAO);
 
     m_shader->setData("uTextCoord", 0);
@@ -99,7 +119,7 @@ void TestText2DSquare::onRender()
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
     // glUseProgram(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTextureUnit(0, 0);
     glBindVertexArray(0);
 }
 

@@ -22,9 +22,9 @@ int main() {
   if (!glfwInit())
       return -1;
 
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+  // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   /* Create a windowed mode window and its OpenGL context */
   window = glfwCreateWindow(640, 480, "festGL renderer", NULL, NULL);
@@ -63,7 +63,7 @@ int main() {
   // Setup Platform/Renderer backends
   ImGui_ImplGlfw_InitForOpenGL(window, true);
 
-  const char* glsl_version = "#version 330";
+  const char* glsl_version = "#version 450";
   ImGui_ImplOpenGL3_Init(glsl_version);
 
   std::println("Vendor: {}", (const char *)glGetString(GL_VENDOR));

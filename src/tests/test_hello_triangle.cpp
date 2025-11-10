@@ -29,27 +29,28 @@ TestHelloTriangle::TestHelloTriangle(const std::string &name)
 
     m_shader = IShader::createUnique(vsPath, fsPath);
 
-    glGenVertexArrays(1, &m_VAO);
-    glBindVertexArray(m_VAO);
+    glCreateVertexArrays(1, &m_VAO);
 
-    glGenBuffers(1, &m_VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_trianglePositions), g_trianglePositions, GL_STATIC_DRAW);
+    glCreateBuffers(1, &m_VBO);
+    glNamedBufferStorage(m_VBO, sizeof(g_trianglePositions), g_trianglePositions, GL_DYNAMIC_STORAGE_BIT);
+    
+    glCreateBuffers(1, &m_IBO);
+    glNamedBufferStorage(m_IBO, sizeof(g_triangleIndexes), g_triangleIndexes, GL_DYNAMIC_STORAGE_BIT);
+    
+    glVertexArrayVertexBuffer(m_VAO, 0, m_VBO, 0, 2 * sizeof(float));
+    glVertexArrayElementBuffer(m_VAO, m_IBO);
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+    glEnableVertexArrayAttrib(m_VAO, 0);
 
-    glGenBuffers(1, &m_IBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_triangleIndexes), g_triangleIndexes, GL_STATIC_DRAW);
+    glVertexArrayAttribFormat(m_VAO, 0, 2, GL_FLOAT, GL_FALSE, 0);
+
+    glVertexArrayAttribBinding(m_VAO, 0, 0);
 
     glBindVertexArray(0);
 }
 
 TestHelloTriangle::~TestHelloTriangle()
 {
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
     glDeleteBuffers(1, &m_VBO);
