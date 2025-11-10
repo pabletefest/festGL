@@ -67,7 +67,7 @@ void OGLShader::ShaderDataSetter::operator()<GLfloat>(uint32_t id, const std::st
     const GLfloat &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glUniform1f(location, data);
+    glProgramUniform1f(id, location, data);
 }
 
 template<>
@@ -75,7 +75,7 @@ void OGLShader::ShaderDataSetter::operator()<GLuint>(uint32_t id, const std::str
     const GLuint &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glUniform1ui(location, data);
+    glProgramUniform1ui(id, location, data);
 }
 
 template<>
@@ -83,7 +83,7 @@ void OGLShader::ShaderDataSetter::operator()<GLint>(uint32_t id, const std::stri
     const GLint &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glUniform1i(location, data);
+    glProgramUniform1i(id, location, data);
 }
 
 template<>
@@ -91,7 +91,7 @@ void OGLShader::ShaderDataSetter::operator()<glm::vec2>(uint32_t id, const std::
     const glm::vec2 &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glUniform2f(location, data.x, data.y);
+    glProgramUniform2f(id, location, data.x, data.y);
 }
 
 template<>
@@ -99,7 +99,7 @@ void OGLShader::ShaderDataSetter::operator()<glm::vec3>(uint32_t id, const std::
     const glm::vec3 &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glUniform3f(location, data.x, data.y, data.z);
+    glProgramUniform3f(id, location, data.x, data.y, data.z);
 }
 
 template<>
@@ -107,7 +107,7 @@ void OGLShader::ShaderDataSetter::operator()<glm::vec4>(uint32_t id, const std::
     const glm::vec4 &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glUniform4f(location, data.x, data.y, data.z, data.w);
+    glProgramUniform4f(id, location, data.x, data.y, data.z, data.w);
 }
 
 template<>
@@ -115,7 +115,7 @@ void OGLShader::ShaderDataSetter::operator()<glm::mat4>(uint32_t id, const std::
     const glm::mat4 &data)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(data));
+    glProgramUniformMatrix4fv(id, location, 1, GL_FALSE, glm::value_ptr(data));
 }
 
 template<>
@@ -123,7 +123,7 @@ void OGLShader::ShaderDataSetter::operator()<GLfloat>(uint32_t id, const std::st
     std::vector<GLfloat> buffer)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glUniform1fv(location, buffer.size(), buffer.data());
+    glProgramUniform1fv(id, location, buffer.size(), buffer.data());
 }
 
 template<>
@@ -131,7 +131,7 @@ void OGLShader::ShaderDataSetter::operator()<glm::vec4>(uint32_t id, const std::
     std::vector<glm::vec4> buffer)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glUniform4fv(location, buffer.size(), glm::value_ptr(buffer.front()));
+    glProgramUniform4fv(id, location, buffer.size(), glm::value_ptr(buffer.front()));
 }
 
 auto OGLShader::compileShader(const std::string &source, GLenum type) -> GLuint
