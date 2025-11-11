@@ -4,8 +4,8 @@ out vec4 FragColor;
 
 in vec2 texCoord;
 
-uniform sampler2D uWallText;
+layout (binding = 0) uniform sampler2D uWallTexture;
 
 void main() {
-    FragColor = texture(uWallText, texCoord);
+    FragColor = texture(uWallTexture, texCoord);
 }

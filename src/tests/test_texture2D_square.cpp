@@ -48,9 +48,12 @@ TestText2DSquare::TestText2DSquare(const std::string &name)
 
     glVertexArrayAttribBinding(m_VAO, 0, 0);
     glVertexArrayAttribBinding(m_VAO, 1, 0);
-
-    int width, height, channels;
+    
     std::filesystem::path imageFilename = "./../../resources/red-brick-wall-2048x2048.jpg";
+    
+    // m_texture = ITexture::createUnique(imageFilename);
+    
+    int width, height, channels;
     auto imageData = ImageLoader::loadManaged<ImageLoader::FlipType::Vertical>(imageFilename, 
         width, height, channels);
 
@@ -59,34 +62,27 @@ TestText2DSquare::TestText2DSquare(const std::string &name)
         exit(1);
     }
 
-    GLenum internalFormat = GL_NONE;
-    GLenum format = GL_NONE;
+    festGL::TextureInfo textureSpecification;
+
+    textureSpecification.width = width;
+    textureSpecification.height = height;
+    textureSpecification.useMipmaps = true;
 
     switch(channels) {
         case 3:
-            internalFormat = GL_RGB8;
-            format = GL_RGB;
+            textureSpecification.format = festGL::TextureFormat::RGB8;
             break;
-        
+            
         case 4:
-            internalFormat = GL_RGBA8;
-            format = GL_RGBA;
+            textureSpecification.format = festGL::TextureFormat::RGBA8;
             break;
         
         default:
             assert(false && "Invalid texture format!");
     }
 
-    glCreateTextures(GL_TEXTURE_2D, 1, &m_textureID);
-  
-    glTextureParameteri(m_textureID, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTextureParameteri(m_textureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTextureParameteri(m_textureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTextureParameteri(m_textureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    glTextureStorage2D(m_textureID, 1, internalFormat, width, height);
-    glTextureSubImage2D(m_textureID, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, imageData.get());
-    glGenerateTextureMipmap(m_textureID);
+    m_texture = ITexture::createUnique(textureSpecification);
+    m_texture->setData(imageData.get());
 
     glBindVertexArray(0);
 }
@@ -94,12 +90,10 @@ TestText2DSquare::TestText2DSquare(const std::string &name)
 TestText2DSquare::~TestText2DSquare()
 {
     glBindVertexArray(0);
-    glBindTextureUnit(0, 0);
 
     glDeleteBuffers(1, &m_VBO);
     glDeleteBuffers(1, &m_VBO);
     glDeleteVertexArrays(1, &m_VAO);
-    glDeleteTextures(1, &m_textureID);
 }
 
 void TestText2DSquare::onUpdate()
@@ -110,11 +104,13 @@ void TestText2DSquare::onRender()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    constexpr uint32_t textureSlot = 0;
+
     m_shader->apply();
-    glBindTextureUnit(0, m_textureID);
+    m_texture->apply(textureSlot);
     glBindVertexArray(m_VAO);
 
-    m_shader->setData("uTextCoord", 0);
+    m_shader->setData("uWallTexture", textureSlot);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

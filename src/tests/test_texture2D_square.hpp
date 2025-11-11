@@ -2,6 +2,7 @@
 
 #include "test.hpp"
 #include "renderer/shader.hpp"
+#include "renderer/texture.hpp"
 
 #include <glad/gl.h>
 #include <glm/vec4.hpp>
@@ -19,6 +20,7 @@ public:
 
 private:
     std::unique_ptr<festGL::IShader> m_shader;
+    std::unique_ptr<festGL::ITexture> m_texture;
 
     GLuint m_VAO; // Vertex Array Object
     GLuint m_VBO; // Vertex Buffer Object
