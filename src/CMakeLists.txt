@@ -26,7 +26,10 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_texture2D_square.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/renderer/shader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/renderer/texture.cpp
+
     ${CMAKE_CURRENT_SOURCE_DIR}/renderer_backend/OpenGL/ogl_shader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/renderer_backend/OpenGL/ogl_texture.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
