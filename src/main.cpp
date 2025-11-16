@@ -13,6 +13,8 @@
 #include "tests/test_hello_triangle.hpp"
 #include "tests/test_texture2D_square.hpp"
 
+#include "utils/image_loader.hpp"
+
 int main() {
   std::println("Hello OpenGL renderer!");
 
@@ -28,11 +30,20 @@ int main() {
 
   /* Create a windowed mode window and its OpenGL context */
   window = glfwCreateWindow(640, 480, "festGL renderer", NULL, NULL);
+  
   if (!window)
   {
       glfwTerminate();
       return -1;
   }
+
+  GLFWimage icons[1];
+  int channels;
+  std::filesystem::path iconPath = "./../../resources/festGL_transparent_logo.png";
+
+  icons[0].pixels = festGL::ImageLoader::load<festGL::ImageLoader::FlipType::NoFlip>(iconPath, icons[0].width, icons[0].height, channels);
+  glfwSetWindowIcon(window, 1, icons);
+  stbi_image_free(icons[0].pixels);
 
   /* Make the window's context current */
   glfwMakeContextCurrent(window);
