@@ -26,4 +26,6 @@ private:
     GLuint m_VBO; // Vertex Buffer Object
     GLuint m_IBO; // Index Buffer Object, same as EBO (Elements Buffer Object)
     GLuint m_textureID;
+
+    glm::vec4 m_textureColor;
 };

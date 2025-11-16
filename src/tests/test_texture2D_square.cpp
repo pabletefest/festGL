@@ -22,7 +22,7 @@ static const GLuint g_quadIndexes[] = {
 };
 
 TestText2DSquare::TestText2DSquare(const std::string &name)
-    : Test(name), m_VAO(0), m_VBO(0), m_IBO(0), m_textureID(0)
+    : Test(name), m_VAO(0), m_VBO(0), m_IBO(0), m_textureID(0), m_textureColor(glm::vec4(1.0f))
 {
     std::filesystem::path vsPath("./../../shaders/texture.glsl.vert");
     std::filesystem::path fsPath("./../../shaders/texture.glsl.frag");
@@ -111,6 +111,7 @@ void TestText2DSquare::onRender()
     glBindVertexArray(m_VAO);
 
     m_shader->setData("uWallTexture", textureSlot);
+    m_shader->setDataBuffer<glm::vec4>("uColor", { m_textureColor } );
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
@@ -121,4 +122,5 @@ void TestText2DSquare::onRender()
 
 void TestText2DSquare::onImGuiRender()
 {
+    ImGui::ColorEdit4("Texture color", glm::value_ptr(m_textureColor));
 }
