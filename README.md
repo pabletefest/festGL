@@ -4,8 +4,10 @@
 
 OpenGL 3D Renderer (work in progress) written in modern C++ and modern OpenGL API 4.6. This project is meant to be cross-platform compatible with Windows and Linux built using CMake.
 
-## Screenshots
+## Showcase
 <img width="641" height="511" alt="imagen" src="https://github.com/user-attachments/assets/d093c376-a9fd-47bc-9a69-70c5d4a6f0a1" />
+
+https://github.com/user-attachments/assets/43cc7feb-ad74-4d5d-ab71-fa6a59014528
 
 ## Building
 The project can be built using CMake as follows:
