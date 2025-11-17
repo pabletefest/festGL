@@ -131,7 +131,7 @@ void OGLShader::ShaderDataSetter::operator()<glm::vec4>(uint32_t id, const std::
     std::vector<glm::vec4> buffer)
 {
     GLint location = glGetUniformLocation(id, name.c_str());
-    glProgramUniformMatrix4fv(id, location, buffer.size(), GL_FALSE, glm::value_ptr(buffer.front()));
+    glProgramUniform4fv(id, location, buffer.size(), glm::value_ptr(buffer.front()));
 }
 
 auto OGLShader::compileShader(const std::string &source, GLenum type) -> GLuint
