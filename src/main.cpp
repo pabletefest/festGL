@@ -12,6 +12,7 @@
 #include "tests/test_clear_color.hpp"
 #include "tests/test_hello_triangle.hpp"
 #include "tests/test_texture2D_square.hpp"
+#include "tests/test_rotating_3d_cube.hpp"
 
 #include "utils/image_loader.hpp"
 
@@ -85,6 +86,7 @@ int main() {
   testsMenu.registerTest<TestClearColor>("Clear color");
   testsMenu.registerTest<TestHelloTriangle>("Hello triangle");
   testsMenu.registerTest<TestText2DSquare>("Texture2D Quad");
+  testsMenu.registerTest<TestRotating3DCube>("3D Cube rotating");
 
   std::string panelTitle = testsMenu.getTestName();
 
