@@ -24,6 +24,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_clear_color.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hello_triangle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_texture2D_square.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_rotating_3d_cube.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/renderer/shader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/renderer/texture.cpp

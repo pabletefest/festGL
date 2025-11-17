@@ -54,7 +54,7 @@ TestHelloTriangle::~TestHelloTriangle()
     glBindVertexArray(0);
 
     glDeleteBuffers(1, &m_VBO);
-    glDeleteBuffers(1, &m_VBO);
+    glDeleteBuffers(1, &m_IBO);
     glDeleteVertexArrays(1, &m_VAO);
 }
 
