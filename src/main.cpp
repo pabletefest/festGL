@@ -16,6 +16,10 @@
 
 #include "utils/image_loader.hpp"
 
+static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
+  glViewport(0, 0, width, height);
+}
+
 int main() {
   std::println("Hello OpenGL renderer!");
 
@@ -45,6 +49,8 @@ int main() {
   icons[0].pixels = festGL::ImageLoader::load<festGL::ImageLoader::FlipType::NoFlip>(iconPath, icons[0].width, icons[0].height, channels);
   glfwSetWindowIcon(window, 1, icons);
   stbi_image_free(icons[0].pixels);
+
+  glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
   /* Make the window's context current */
   glfwMakeContextCurrent(window);
