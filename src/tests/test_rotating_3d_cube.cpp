@@ -62,8 +62,6 @@ TestRotating3DCube::TestRotating3DCube(const std::string &name)
 
     m_shader = IShader::createUnique(vsPath, fsPath);
 
-    glEnable(GL_DEPTH_TEST);
-
     glCreateVertexArrays(1, &m_VAO);
 
     glCreateBuffers(1, &m_VBO);
@@ -97,6 +95,7 @@ void TestRotating3DCube::onUpdate()
 
 void TestRotating3DCube::onRender()
 {
+    glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
@@ -124,6 +123,7 @@ void TestRotating3DCube::onRender()
     // glUseProgram(0);
     glBindTextureUnit(0, 0);
     glBindVertexArray(0);
+    glDisable(GL_DEPTH_TEST);
 }
 
 void TestRotating3DCube::onImGuiRender()
