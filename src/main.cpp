@@ -33,6 +33,8 @@ int main() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+  // glfwWindowHint(GLFW_AUTO_ICONIFY, GL_FALSE);
+
   /* Create a windowed mode window and its OpenGL context */
   window = glfwCreateWindow(640, 480, "festGL renderer", NULL, NULL);
   
