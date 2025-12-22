@@ -2,7 +2,7 @@
 
 <img width="534" height="467" alt="festGL transparent logo" src="https://github.com/user-attachments/assets/c5d74f77-8f59-42e5-a086-8b2db600700e" />
 
-festGl is a OpenGL 3D Renderer (work in progress) written in modern C++ and modern OpenGL API 4.6. This project is meant to be cross-platform compatible with Windows and Linux using CMake.
+festGL is a OpenGL 3D Renderer (work in progress) written in modern C++ and modern OpenGL API 4.6. This project is meant to be cross-platform compatible with Windows and Linux using CMake.
 
 ## Showcase
 <img width="641" height="511" alt="imagen" src="https://github.com/user-attachments/assets/d093c376-a9fd-47bc-9a69-70c5d4a6f0a1" />
